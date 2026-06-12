@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Toy Design & Educational Games</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-avorio: #FAF6EE;
+            --text-main: #2C2416;
+            --accent-gold: #D4A853;
+            --accent-wood: #8B5E3C;
+            --sidebar-bg: #F2EBE1;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-avorio);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Barra Laterale Sinistra */
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-bg);
+            padding: 50px 35px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(44, 36, 22, 0.05);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-wood);
+            margin-bottom: 60px;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .nav-item {
+            font-family: var(--font-title);
+            font-size: 1.15rem;
+            color: var(--text-main);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.55;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            opacity: 1;
+            color: var(--accent-wood);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active::before {
+            content: "—";
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* Area Principale di Contenuto */
+        .main-content {
+            flex: 1;
+            padding: 40px 50px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .project-panel {
+            display: none;
+            height: 100%;
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-panel.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Layout Vetrina (Hanafuda, Orso, Eduflash) */
+        .showcase-layout {
+            align-items: center;
+            gap: 50px;
+        }
+
+        .project-visual {
+            flex: 1.2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .project-image {
+            width: 100%;
+            max-height: 80vh;
+            border-radius: 6px;
+            box-shadow: 0 15px 35px rgba(44, 36, 22, 0.06);
+            object-fit: contain; /* Mantiene l'immagine intera senza tagliarla */
+            background-color: transparent;
+        }
+
+        .project-info {
+            flex: 1;
+            position: relative;
+        }
+
+        .project-number {
+            font-family: var(--font-title);
+            font-size: 7rem;
+            color: var(--accent-gold);
+            opacity: 0.15;
+            position: absolute;
+            top: -65px;
+            left: -20px;
+            z-index: -1;
+            user-select: none;
+        }
+
+        .project-title {
+            font-family: var(--font-title);
+            font-size: 2.6rem;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            color: var(--text-main);
+        }
+
+        .project-desc {
+            font-size: 1.05rem;
+            line-height: 1.65;
+            color: rgba(44, 36, 22, 0.85);
+        }
+
+        /* Layout Applicazioni Giocabili (In-Page) */
+        .game-layout {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+        }
+
+        .game-header {
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .game-header .project-title {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .game-header .project-desc {
+            font-size: 1rem;
+        }
+
+        .game-frame-container {
+            flex: 1;
+            width: 100%;
+            min-height: 68vh;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 35px rgba(44, 36, 22, 0.06);
+            overflow: hidden;
+            border: 1px solid rgba(44, 36, 22, 0.08);
+        }
+
+        .game-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Stile per Pulsante Esterno */
+        .btn-external {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            background-color: var(--accent-wood);
+            color: var(--bg-avorio);
+            text-decoration: none;
+            font-family: var(--font-title);
+            font-size: 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            box-shadow: 0 10px 20px rgba(139, 94, 60, 0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-external:hover {
+            background-color: var(--text-main);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(44, 36, 22, 0.2);
+            color: var(--bg-avorio);
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">Lorenzo<br>Sciallato</div>
+        <div class="subtitle">Toy Design Showcase</div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item active" onclick="showProject('p1', this)">Hanafuda</li>
+            <li class="nav-item" onclick="showProject('p2', this)">Orsetto Garage</li>
+            <li class="nav-item" onclick="showProject('p3', this)">Eduflash</li>
+            <li class="nav-item" onclick="showProject('p4', this)">Cerca Parole</li>
+            <li class="nav-item" onclick="showProject('p5', this)">Inventagiochi 3000</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        
+        <div id="p1" class="project-panel showcase-layout active">
+            <div class="project-visual">
+                <img src="https://res.cloudinary.com/dlppkpjqs/image/upload/v1781278782/anteprima_hanafuda_page-0001_r5noas.jpg" alt="Hanafuda" class="project-image">
+            </div>
+            <div class="project-info">
+                <div class="project-number">01</div>
+                <h2 class="project-title">Mazzo Hanafuda</h2>
+                <p class="project-desc">
+                    Aiutato da un'IA ho reimmaginato un gioco classico della cultura giapponese, l'hanafuda, reinterpretandolo graficamente con lo stile tipico e affascinante del woodblock tradizionale giapponese.
+                </p>
+            </div>
+        </div>
+
+        <div id="p2" class="project-panel showcase-layout">
+            <div class="project-visual">
+                <img src="https://res.cloudinary.com/dlppkpjqs/image/upload/v1781279210/orso_page-0001_xiwn4a.jpg" alt="Orsetto Garage" class="project-image">
+            </div>
+            <div class="project-info">
+                <div class="project-number">02</div>
+                <h2 class="project-title">Orsetto Garage</h2>
+                <p class="project-desc">
+                    Ho pensato ad un oggetto di design/giocattolo costituito da un orso simpatico e pacioso, i cui cassettini strutturali sono a loro volta delle macchinine indipendenti pilotate da altri simpatici animali.
+                </p>
+            </div>
+        </div>
+
+        <div id="p3" class="project-panel showcase-layout">
+            <div class="project-visual">
+                <img src="https://res.cloudinary.com/dlppkpjqs/image/upload/v1781279599/eduflash_page-0001_e5sg08.jpg" alt="Eduflash" class="project-image">
+            </div>
+            <div class="project-info">
+                <div class="project-number">03</div>
+                <h2 class="project-title">Eduflash</h2>
+                <p class="project-desc">
+                    Nato dall'esigenza di inventare un gioco che potesse essere declinato in più forme possibili (da UNO alla briscola, passando per il solitario e la scopa). Il mazzo è strutturato come carte flashcard, ingegnerizzate specificamente per memorizzare in modo interattivo le materie del mio corso di studio.
+                </p>
+            </div>
+        </div>
+
+        <div id="p4" class="project-panel game-layout">
+            <div class="game-header">
+                <div class="project-number" style="top: -25px;">04</div>
+                <h2 class="project-title">Cerca Parole Munari</h2>
+                <p class="project-desc">Nato per trovare un attimo di distrazione e riposo tra le pagine di "Una Mano Spensierata". Un passatempo multilingue strutturato per stimolare la mente con eleganza e pulizia visiva.</p>
+            </div>
+            <div class="game-frame-container">
+                <iframe id="iframe-crosswords" class="game-iframe" data-template="source-crosswords"></iframe>
+            </div>
+        </div>
+
+        <div id="p5" class="project-panel game-layout">
+            <div class="game-header">
+                <div class="project-number" style="top: -25px;">05</div>
+                <h2 class="project-title">L'Inventagiochi 3000</h2>
+                <p class="project-desc">Nato come "gioco" per i miei colleghi di corso in Toy Design col quale sbizzarrirsi a trovare e pensare combinazioni di giochi sempre nuove ed evitare definitivamente il blocco del foglio bianco.</p>
+            </div>
+            <div class="game-action">
+                <a href="https://lorenzosciallato.github.io/inventa-giochi-3000/" target="_blank" class="btn-external">Gioca a L'Inventagiochi 3000 ↗</a>
+            </div>
+        </div>
+
+    </main>
+
+    <div style="display: none;">
+        
+        <textarea id="source-crosswords">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Cerca Parole Munari - Multi</title>
+    <style>
+        :root {
+            --giallo: #FFD200;
+            --arancio: #FF5F00; --blu: #0089D0;
+            --verde: #00A651; --crema: #FDF5E6; --nero: #231F20;
+            --font: "Helvetica Neue", Arial, sans-serif;
+        }
+        * { touch-action: manipulation; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--crema);
+            font-family: var(--font);
+            margin: 0; display: flex; flex-direction: column; align-items: center;
+            height: 100dvh; overflow: hidden; color: var(--nero);
+        }
+
+        .scena {
+            width: 100%;
+            height: 130px; background: var(--giallo);
+            position: relative; border-bottom: 6px solid var(--nero); flex-shrink: 0;
+        }
+        .sole { width: 50px; height: 50px; background: var(--arancio); position: absolute; top: 15px; left: 20px; border-radius: 50%; }
+        .mare-geo { position: absolute; bottom: 0; width: 100%; height: 30px; background: var(--blu); }
+        .onda { width: 40px; height: 20px; background: var(--blu); border-radius: 20px 20px 0 0; position: absolute; top: -10px; }
+        .palma-geo { position: absolute; bottom: 30px; left: 10%; width: 10px; height: 60px; background: var(--nero); }
+        .fronda { width: 60px; height: 20px; background: var(--verde); position: absolute; top: -10px; left: -25px; border-radius: 50px; }
+        .esploratore-disegno { position: absolute; bottom: 30px; left: 80%; width: 40px; height: 60px; }
+        .corpo { width: 20px; height: 30px; background: var(--arancio); position: absolute; bottom: 0; left: 10px; }
+        .testa { width: 18px; height: 18px; background: var(--nero); border-radius: 50%; position: absolute; top: -12px; left: 11px; }
+        .cannocchiale { width: 35px; height: 6px; background: var(--nero); position: absolute; top: -5px; left: 5px; transform: rotate(-10deg); }
+        
+        .cat-scroll {
+            position: absolute;
+            top: 10px; right: 0; left: 0; 
+            z-index: 100; display: flex; gap: 8px;
+            overflow-x: auto; padding: 0 15px;
+            scrollbar-width: none;
+            justify-content: flex-start;
+        }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        
+        .btn-cat {
+            background: white;
+            border: 2px solid var(--nero); font-weight: bold;
+            padding: 6px 12px; cursor: pointer; opacity: 0.8; font-size: 0.75rem;
+            white-space: nowrap; flex-shrink: 0;
+            border-radius: 4px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+        .btn-cat.active { 
+            opacity: 1;
+            background: var(--giallo); 
+            box-shadow: 3px 3px 0 var(--nero); 
+            transform: translateY(-2px);
+        }
+
+        .game-main {
+            flex-grow: 1;
+            width: 100%; overflow: hidden;
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            padding: 5px; gap: 10px;
+        }
+
+        @media (min-width: 800px) {
+            .game-main { flex-direction: row; gap: 40px; padding: 20px; }
+            .cat-scroll { justify-content: center; left: auto; right: 20px; width: auto; }
+        }
+
+        .grid-container {
+            aspect-ratio: 1/1;
+            width: 96vmin; max-width: 60vh; max-height: 60vh;
+            background: var(--nero); padding: 4px;
+            box-shadow: 6px 6px 0 var(--arancio);
+            display: flex;
+        }
+        .grid-wrapper {
+            width: 100%;
+            height: 100%;
+            display: grid; gap: 1px; touch-action: none; background: var(--nero);
+        }
+        .cell {
+            background: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; cursor: pointer; user-select: none;
+            font-size: clamp(9px, 2.8vmin, 20px);
+            line-height: 1;
+        }
+        .cell.sel { background: var(--giallo); }
+        .cell.found { background: var(--verde); color: white; transition: 0.3s; }
+
+        .word-list {
+            display: flex;
+            flex-wrap: wrap; gap: 6px; justify-content: center;
+            width: 98%; max-height: 25vh; overflow-y: auto; padding-bottom: 20px;
+        }
+        @media (min-width: 800px) {
+            .word-list {
+                width: 280px;
+                max-width: 280px; max-height: 80vh;
+                flex-direction: column; align-items: flex-start; justify-content: flex-start;
+            }
+        }
+        .w-item {
+            font-size: 0.75rem;
+            padding: 4px 8px; border: 1px solid var(--nero);
+            background: white; font-weight: bold; cursor: default;
+            display: flex; flex-direction: column; align-items: center;
+            line-height: 1.1;
+            text-align: center;
+        }
+        .w-main { display: block; }
+        .w-sub { 
+            font-size: 0.6rem;
+            font-weight: normal; color: #555; 
+            font-style: italic; margin-top: 2px; 
+        }
+        .w-item.done { opacity: 0.5; border-color: #ccc; }
+        .w-item.done .w-main { text-decoration: line-through; decoration-thickness: 2px; decoration-color: var(--arancio); }
+
+        #win-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(253, 245, 230, 0.98);
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center;
+            z-index: 3000; padding: 20px; text-align: center;
+        }
+        .win-text {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900; color: var(--arancio);
+            text-shadow: 2px 2px var(--nero); margin-bottom: 20px; line-height: 1.2;
+            animation: bounce 0.6s infinite alternate;
+        }
+        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05); } }
+        .win-sub { font-size: 1rem; font-weight: bold; color: var(--nero); margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="cat-scroll" id="cat-menu"></div>
+
+    <div class="scena">
+        <div class="sole"></div>
+        <div class="palma-geo"><div class="fronda"></div></div>
+        <div class="mare-geo"><div class="onda" style="left:10%"></div><div class="onda" style="left:40%"></div><div class="onda" style="left:70%"></div></div>
+        <div class="esploratore-disegno"><div class="corpo"></div><div class="testa"></div><div class="cannocchiale"></div></div>
+    </div>
+
+    <div class="game-main">
+        <div class="grid-container">
+            <div class="grid-wrapper" id="grid-root"></div>
+        </div>
+        <div class="word-list" id="word-list"></div>
+    </div>
+
+    <div id="win-overlay">
+        <div class="win-text" id="win-msg"></div>
+        <div class="win-sub">NUOVO GIOCO IN 5 SECONDI...</div>
+    </div>
+
+    <script>
+        const wordData = {
+            it_easy: {
+                label: "🇮🇹 ITA Facile",
+                type: 'std',
+                words: [
+                    {w:"CASA"},{w:"SOLE"},{w:"MARE"},{w:"GATTO"},{w:"CANE"},{w:"FIORE"},{w:"PANE"},{w:"LUPO"},{w:"MELA"},{w:"PERA"},
+                    {w:"OCCHIO"},{w:"MANO"},{w:"PIEDE"},{w:"TESTA"},{w:"BOCCA"},{w:"NASO"},{w:"ROSA"},{w:"VIOLA"},{w:"BLU"},{w:"NERO"},
+                    {w:"TRENO"},{w:"AUTO"},{w:"BICI"},{w:"NAVE"},{w:"AEREO"},{w:"AMICO"},{w:"NONNO"},{w:"ZIO"},{w:"PAPA"},{w:"MAMMA"},
+                    {w:"LIBRO"},{w:"PENNA"},{w:"FOGLIO"},{w:"SCUOLA"},{w:"GIOCO"},{w:"PALLA"},{w:"ORTICA"},{w:"BOSCO"},{w:"PRATO"},{w:"LAGO"},
+                    {w:"FIUME"},{w:"MONTE"},{w:"NEVE"},{w:"PIOGGIA"},{w:"VENTO"},{w:"NUVOLE"},{w:"STELLA"},{w:"LUNA"},{w:"NOTTE"},{w:"GIORNO"}
+                ]
+            },
+            it_hard: {
+                label: "🇮🇹 ITA Difficile",
+                type: 'std',
+                words: [
+                    {w:"SCILINGUAGNOLO"},{w:"ARZIGOGOLATO"},{w:"INCOMMENSURABILE"},{w:"IDIOSINCRASIA"},{w:"SDRUCCIOLEVOLE"},
+                    {w:"ACCONDISCENDERE"},{w:"INELUTTABILE"},{w:"SCIOCCHEZZAIO"},{w:"GNOSEOLOGIA"},{w:"INTRANSIGENTE"},
+                    {w:"ZUZZURELLONE"},{w:"SESQUIPEDALE"},{w:"PROCRASTINARE"},{w:"LAPALISSIANO"},{w:"MASTODONTICO"},
+                    {w:"INCONCEPIBILE"},{w:"VESSILIFERO"},{w:"AUTOCTONO"},{w:"PLEONASTICO"},{w:"SFARZOSISSIMO"},
+                    {w:"ELEMOSINIERE"},{w:"PANTAGRUELICO"},{w:"DISEDUCATIVO"},{w:"ASTRUSITA"},{w:"LOGORROICO"},
+                    {w:"PREZIOSISSIMO"},{w:"LUNGIMIRANTE"},{w:"SPETTACOLARE"},{w:"MERAVIGLIOSO"},{w:"STRAVAGANTE"},
+                    {w:"SOLIPSISTA"},{w:"ICONOCLASTA"},{w:"PROSINDACO"},{w:"LUCULLIANO"},{w:"ROCAMBOLESCO"},
+                    {w:"MAGNILOQUENTE"},{w:"PERFUNCTORIO"},{w:"SAGACE"},{w:"DOVIZIOSO"},{w:"TRIMALCIONICO"},
+                    {w:"PACIFICAMENTE"},{w:"IRRIVERENTE"},{w:"SOTTERFUGIO"},{w:"DEAMBULARE"},{w:"STUPEFACENTE"},
+                    {w:"INOSSIDABILE"},{w:"PRECIPITEVOLE"},{w:"OBLITERARE"},{w:"QUISQUILIA"},{w:"PINZILLACCHERA"}
+                ]
+            },
+            en: {
+                label: "🇬🇧 English",
+                type: 'lang',
+                words: [
+                    {w:"HOUSE",t:"casa"},{w:"SUN",t:"sole"},{w:"WATER",t:"acqua"},{w:"FIRE",t:"fuoco"},{w:"EARTH",t:"terra"},
+                    {w:"MOON",t:"luna"},{w:"STAR",t:"stella"},{w:"LOVE",t:"amore"},{w:"TIME",t:"tempo"},{w:"FRIEND",t:"amico"},
+                    {w:"BOOK",t:"libro"},{w:"SCHOOL",t:"scuola"},{w:"WORK",t:"lavoro"},{w:"MONEY",t:"soldi"},{w:"CITY",t:"città"},
+                    {w:"WORLD",t:"mondo"},{w:"PEOPLE",t:"gente"},{w:"FAMILY",t:"famiglia"},{w:"GAME",t:"gioco"},{w:"MUSIC",t:"musica"},
+                    {w:"SUMMER",t:"estate"},{w:"WINTER",t:"inverno"},{w:"SPRING",t:"primavera"},{w:"AUTUMN",t:"autunno"},{w:"COLOR",t:"colore"},
+                    {w:"ANIMAL",t:"animale"},{w:"GARDEN",t:"giardino"},{w:"RIVER",t:"fiume"},{w:"MOUNTAIN",t:"montagna"},{w:"OCEAN",t:"oceano"},
+                    {w:"DOCTOR",t:"dottore"},{w:"TEACHER",t:"insegnante"},{w:"DRIVER",t:"autista"},{w:"COOK",t:"cuoco"},{w:"ARTIST",t:"artista"},
+                    {w:"BREAD",t:"pane"},{w:"MILK",t:"latte"},{w:"COFFEE",t:"caffè"},{w:"SUGAR",t:"zucchero"},{w:"FRUIT",t:"frutta"},
+                    {w:"TABLE",t:"tavolo"},{w:"CHAIR",t:"sedia"},{w:"WINDOW",t:"finestra"},{w:"DOOR",t:"porta"},{w:"BED",t:"letto"},
+                    {w:"YELLOW",t:"giallo"},{w:"GREEN",t:"verde"},{w:"WHITE",t:"bianco"},{w:"BLACK",t:"nero"},{w:"RED",t:"rosso"}
+                ]
+            },
+            es: {
+                label: "🇪🇸 Español",
+                type: 'lang',
+                words: [
+                    {w:"CASA",t:"casa"},{w:"SOL",t:"sole"},{w:"LUNA",t:"luna"},{w:"CIELO",t:"cielo"},{w:"MAR",t:"mare"},
+                    {w:"PERRO",t:"cane"},{w:"GATO",t:"gatto"},{w:"FLOR",t:"fiore"},{w:"AMOR",t:"amore"},{w:"VIDA",t:"vita"},
+                    {w:"TIEMPO",t:"tempo"},{w:"NOCHE",t:"notte"},{w:"DIA",t:"giorno"},{w:"LUZ",t:"luce"},{w:"AGUA",t:"acqua"},
+                    {w:"FUEGO",t:"fuoco"},{w:"TIERRA",t:"terra"},{w:"VIENTO",t:"vento"},{w:"HOMBRE",t:"uomo"},{w:"MUJER",t:"donna"},
+                    {w:"NIÑO",t:"bambino"},{w:"LIBRO",t:"libro"},{w:"ESCUELA",t:"scuola"},{w:"PAN",t:"pane"},{w:"LECHE",t:"latte"},
+                    {w:"CARNE",t:"carne"},{w:"MANZANA",t:"mela"},{w:"ROJO",t:"rosso"},{w:"AZUL",t:"blu"},{w:"VERDE",t:"verde"},
+                    {w:"BLANCO",t:"bianco"},{w:"NEGRO",t:"nero"},{w:"AMIGO",t:"amico"},{w:"PADRE",t:"padre"},{w:"MADRE",t:"madre"},
+                    {w:"HERMANO",t:"fratello"},{w:"CAMA",t:"letto"},{w:"MESA",t:"tavolo"},{w:"SILLA",t:"sedia"},{w:"PUERTA",t:"porta"},
+                    {w:"VENTANA",t:"finestra"},{w:"CALLE",t:"strada"},{w:"COCHE",t:"auto"},{w:"TREN",t:"treno"},{w:"AVION",t:"aereo"},
+                    {w:"PLAYA",t:"spiaggia"},{w:"MONTAÑA",t:"montagna"},{w:"RIO",t:"fiume"},{w:"BOSQUE",t:"bosco"},{w:"CIUDAD",t:"città"}
+                ]
+            },
+            de: {
+                label: "🇩🇪 Deutsch",
+                type: 'lang',
+                words: [
+                    {w:"HAUS",t:"casa"},{w:"SONNE",t:"sole"},{w:"MOND",t:"luna"},{w:"STERN",t:"stella"},{w:"HIMMEL",t:"cielo"},
+                    {w:"WASSER",t:"acqua"},{w:"FEUER",t:"fuoco"},{w:"LUFT",t:"aria"},{w:"ERDE",t:"terra"},{w:"BAUM",t:"albero"},
+                    {w:"BLUME",t:"fiore"},{w:"GARTEN",t:"giardino"},{w:"WALD",t:"foresta"},{w:"BERG",t:"montagna"},{w:"MEER",t:"mare"},
+                    {w:"TAG",t:"giorno"},{w:"NACHT",t:"notte"},{w:"ZEIT",t:"tempo"},{w:"JAHR",t:"anno"},{w:"WOCHE",t:"settimana"},
+                    {w:"MENSCH",t:"uomo"},{w:"FRAU",t:"donna"},{w:"KIND",t:"bambino"},{w:"FREUND",t:"amico"},{w:"FAMILIE",t:"famiglia"},
+                    {w:"BROT",t:"pane"},{w:"MILCH",t:"latte"},{w:"KAFFEE",t:"caffè"},{w:"WASSER",t:"acqua"},{w:"BIER",t:"birra"},
+                    {w:"AUTO",t:"auto"},{w:"ZUG",t:"treno"},{w:"BUS",t:"autobus"},{w:"FLUGZEUG",t:"aereo"},{w:"SCHIFF",t:"nave"},
+                    {w:"SCHULE",t:"scuola"},{w:"BUCH",t:"libro"},{w:"STIFT",t:"penna"},{w:"LEHRER",t:"insegnante"},{w:"SCHUELER",t:"studente"},
+                    {w:"TISCH",t:"tavolo"},{w:"STUHL",t:"sedia"},{w:"FENSTER",t:"finestra"},{w:"TUER",t:"porta"},{w:"BETT",t:"letto"},
+                    {w:"ROT",t:"rosso"},{w:"BLAU",t:"blu"},{w:"GRUEN",t:"verde"},{w:"GELB",t:"giallo"},{w:"WEISS",t:"bianco"}
+                ]
+            },
+            fr: {
+                label: "🇫🇷 Français",
+                type: 'lang',
+                words: [
+                    {w:"MAISON",t:"casa"},{w:"SOLEIL",t:"sole"},{w:"LUNE",t:"luna"},{w:"ETOILE",t:"stella"},{w:"CIEL",t:"cielo"},
+                    {w:"EAU",t:"acqua"},{w:"FEU",t:"fuoco"},{w:"TERRE",t:"terra"},{w:"AIR",t:"aria"},{w:"ARBRE",t:"albero"},
+                    {w:"FLEUR",t:"fiore"},{w:"JARDIN",t:"giardino"},{w:"FORET",t:"foresta"},{w:"MONTAGNE",t:"montagna"},{w:"MER",t:"mare"},
+                    {w:"JOUR",t:"giorno"},{w:"NUIT",t:"notte"},{w:"TEMPS",t:"tempo"},{w:"ANNEE",t:"anno"},{w:"MOIS",t:"mese"},
+                    {w:"HOMME",t:"uomo"},{w:"FEMME",t:"donna"},{w:"ENFANT",t:"bambino"},{w:"AMI",t:"amico"},{w:"FAMILLE",t:"famiglia"},
+                    {w:"PAIN",t:"pane"},{w:"LAIT",t:"latte"},{w:"CAFE",t:"caffè"},{w:"VIN",t:"vino"},{w:"EAU",t:"acqua"},
+                    {w:"VOITURE",t:"auto"},{w:"TRAIN",t:"treno"},{w:"AVION",t:"aereo"},{w:"BATEAU",t:"barca"},{w:"RUE",t:"strada"},
+                    {w:"ECOLE",t:"scuola"},{w:"LIVRE",t:"libro"},{w:"CRAYON",t:"matita"},{w:"PROF",t:"professore"},{w:"ELEVE",t:"alunno"},
+                    {w:"TABLE",t:"tavolo"},{w:"CHAISE",t:"sedia"},{w:"FENETRE",t:"finestra"},{w:"PORTE",t:"porta"},{w:"LIT",t:"letto"},
+                    {w:"ROUGE",t:"rosso"},{w:"BLEU",t:"blu"},{w:"VERT",t:"verde"},{w:"JAUNE",t:"giallo"},{w:"NOIR",t:"nero"}
+                ]
+            },
+            geo: {
+                label: "🌍 Geografia",
+                type: 'quiz',
+                words: [
+                    {w:"ROMA",t:"Capitale d'Italia"}, {w:"PARIGI",t:"Capitale della Francia"}, {w:"LONDRA",t:"Capitale del Regno Unito"},
+                    {w:"BERLINO",t:"Capitale della Germania"}, {w:"MADRID",t:"Capitale della Spagna"}, {w:"VIENNA",t:"Capitale dell'Austria"},
+                    {w:"ATENE",t:"Capitale della Grecia"}, {w:"LISBONA",t:"Capitale del Portogallo"}, {w:"DUBLINO",t:"Capitale dell'Irlanda"},
+                    {w:"OSLO",t:"Capitale della Norvegia"}, {w:"PO",t:"Fiume più lungo d'Italia"}, {w:"TEVERE",t:"Fiume di Roma"},
+                    {w:"ARNO",t:"Fiume di Firenze"}, {w:"NILO",t:"Fiume più lungo del mondo"}, {w:"AMAZZONIA",t:"Grande foresta pluviale"},
+                    {w:"ETNA",t:"Vulcano in Sicilia"}, {w:"VESUVIO",t:"Vulcano a Napoli"}, {w:"ALPI",t:"Catena montuosa a nord"},
+                    {w:"APPENNINI",t:"Spina dorsale dell'Italia"}, {w:"EVEREST",t:"Monte più alto del mondo"}, {w:"SAHARA",t:"Deserto più grande"},
+                    {w:"PACIFICO",t:"Oceano più vasto"}, {w:"ATLANTICO",t:"Oceano tra Europa e USA"}, {w:"MEDITERRANEO",t:"Il Mare Nostrum"},
+                    {w:"SICILIA",t:"Isola più grande d'Italia"}, {w:"SARDEGNA",t:"Isola dei nuraghi"}, {w:"CAPRI",t:"Isola famosa di Napoli"},
+                    {w:"ELBA",t:"Isola toscana"}, {w:"ISCHIA",t:"Isola verde campana"}, {w:"VENEZIA",t:"Città sulla laguna"},
+                    {w:"MILANO",t:"Città del Duomo e moda"}, {w:"TORINO",t:"Città della Mole"}, {w:"NAPOLI",t:"Città del Vesuvio"},
+                    {w:"FIRENZE",t:"Culla del Rinascimento"}, {w:"BOLOGNA",t:"La città Dotta"}, {w:"PISA",t:"Ha la torre pendente"},
+                    {w:"VERONA",t:"Città di Romeo e Giulietta"}, {w:"GENOVA",t:"Città della Lanterna"}, {w:"BARI",t:"Capoluogo della Puglia"},
+                    {w:"PALERMO",t:"Capoluogo della Sicilia"}, {w:"ASIA",t:"Continente più grande"}, {w:"AFRICA",t:"Continente a sud Europa"},
+                    {w:"EUROPA",t:"Il vecchio continente"}, {w:"AMERICA",t:"Il nuovo mondo"}, {w:"OCEANIA",t:"Continente dei canguri"},
+                    {w:"CINA",t:"Paese della Grande Muraglia"}, {w:"GIAPPONE",t:"Paese del Sol Levante"}, {w:"EGITTO",t:"Paese delle Piramidi"},
+                    {w:"BRASILE",t:"Paese del Carnevale"}, {w:"CANADA",t:"Paese dell'Acero"}
+                ]
+            }
+        };
+        let currentCatKey = 'it_easy';
+        let size = 16;
+        let grid = [];
+        let activeWords = [];
+        let foundCount = 0;
+        let audioCtx = null;
+
+        function initMenu() {
+            const menu = document.getElementById('cat-menu');
+            let html = '';
+            for (const key in wordData) {
+                html += `<button class="btn-cat ${key === currentCatKey ? 'active' : ''}" onclick="changeCat('${key}')">${wordData[key].label}</button>`;
+            }
+            menu.innerHTML = html;
+        }
+
+        function changeCat(key) {
+            currentCatKey = key;
+            initMenu();
+            initGame();
+        }
+
+        function initGame() {
+            document.getElementById('win-overlay').style.display = 'none';
+            const catData = wordData[currentCatKey];
+            const pool = [...catData.words];
+            const selected = pool.sort(() => 0.5 - Math.random()).slice(0, 10);
+            
+            activeWords = selected.map(item => ({
+                w: item.w,
+                t: item.t || "",
+                type: catData.type
+            }));
+            foundCount = 0;
+            grid = Array(size).fill(0).map(() => Array(size).fill(''));
+            
+            const dirs = [[0,1], [1,0], [1,1], [0,-1], [-1,0], [-1,-1], [1,-1], [-1,1]];
+            for (let item of activeWords) {
+                let w = item.w;
+                let placed = false, attempts = 0;
+                while(!placed && attempts++ < 200) {
+                    const d = dirs[Math.floor(Math.random() * dirs.length)];
+                    const r = Math.floor(Math.random() * size);
+                    const c = Math.floor(Math.random() * size);
+                    
+                    let fits = true;
+                    for(let i=0; i<w.length; i++) {
+                        let nr = r + d[0]*i, nc = c + d[1]*i;
+                        if(nr < 0 || nr >= size || nc < 0 || nc >= size || (grid[nr][nc] !== '' && grid[nr][nc] !== w[i])) {
+                            fits = false;
+                            break;
+                        }
+                    }
+                    if(fits) {
+                        for(let i=0; i<w.length; i++) grid[r + d[0]*i][c + d[1]*i] = w[i];
+                        placed = true;
+                    }
+                }
+            }
+
+            const abc = "ABCDEFGHILMNOPQRSTUVZ";
+            for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(grid[r][c] === '') grid[r][c] = abc[Math.floor(Math.random() * abc.length)];
+
+            render();
+        }
+
+        function render() {
+            const root = document.getElementById('grid-root');
+            const list = document.getElementById('word-list');
+            root.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            
+            let html = '';
+            for(let i=0; i<size*size; i++) {
+                const r = Math.floor(i/size), c = i%size;
+                html += `<div class="cell" data-idx="${i}">${grid[r][c]}</div>`;
+            }
+            root.innerHTML = html;
+
+            list.innerHTML = activeWords.map(item => {
+                let label = "";
+                if (item.type === 'quiz') {
+                    label = `<span class="w-main">${item.t}</span>`;
+                } else if (item.type === 'lang') {
+                    label = `<span class="w-main">${item.w}</span><span class="w-sub">(${item.t})</span>`;
+                } else {
+                    label = `<span class="w-main">${item.w}</span>`;
+                }
+                return `<div class="w-item" id="tag-${item.w}">${label}</div>`;
+            }).join('');
+            setupEvents();
+        }
+
+        function setupEvents() {
+            const cells = document.querySelectorAll('.cell');
+            let isDrag = false, startIdx = -1, selection = [];
+            const getCell = (e) => {
+                const x = e.touches ? e.touches[0].clientX : e.clientX;
+                const y = e.touches ? e.touches[0].clientY : e.clientY;
+                return document.elementFromPoint(x, y)?.closest('.cell');
+            };
+            const start = (e) => {
+                const c = getCell(e);
+                if (!c) return;
+                isDrag = true; startIdx = parseInt(c.dataset.idx);
+                hl(startIdx, startIdx);
+            };
+            const move = (e) => {
+                if (!isDrag) return;
+                const c = getCell(e); if (c) hl(startIdx, parseInt(c.dataset.idx));
+            };
+
+            const end = () => {
+                if (!isDrag) return;
+                isDrag = false;
+                const str = selection.map(c => c.innerText).join('');
+                const rev = str.split('').reverse().join('');
+                let foundItem = activeWords.find(item => item.w === str || item.w === rev);
+                if (foundItem) {
+                    selection.forEach(c => c.classList.add('found'));
+                    const tag = document.getElementById('tag-' + foundItem.w);
+                    if (tag && !tag.classList.contains('done')) {
+                        tag.classList.add('done');
+                        foundCount++; checkWin();
+                    }
+                }
+                cells.forEach(c => c.classList.remove('sel'));
+                selection = [];
+            };
+
+            const hl = (s, e) => {
+                cells.forEach(c => c.classList.remove('sel'));
+                selection = [];
+                const r1 = Math.floor(s/size), c1 = s%size;
+                const r2 = Math.floor(e/size), c2 = e%size;
+                const dr = r2 - r1, dc = c2 - c1;
+                const steps = Math.max(Math.abs(dr), Math.abs(dc));
+                if (steps === 0) { cells[s].classList.add('sel'); selection.push(cells[s]); return; }
+                if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) return;
+                const stepR = dr / steps, stepC = dc / steps;
+                for (let i = 0; i <= steps; i++) {
+                    const idx = (r1 + stepR * i) * size + (c1 + stepC * i);
+                    if (cells[idx]) { cells[idx].classList.add('sel'); selection.push(cells[idx]); }
+                }
+            };
+            const root = document.getElementById('grid-root');
+            root.onmousedown = start; window.onmousemove = move; window.onmouseup = end;
+            root.ontouchstart = (e) => { if(e.target.closest('.cell')) e.preventDefault(); start(e); };
+            window.ontouchmove = move; window.ontouchend = end;
+        }
+
+        function checkWin() {
+            if (foundCount === activeWords.length) {
+                const winOver = document.getElementById('win-overlay');
+                const winMsg = document.getElementById('win-msg');
+                winOver.style.display = 'flex';
+                winMsg.innerHTML = "Ammazza!! Complimenti!!<br>Ora torna a studiare";
+                playWinSound();
+                setTimeout(initGame, 5000);
+            }
+        }
+
+        function playWinSound() {
+            try {
+                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                [523, 659, 784, 1046, 1318].forEach((f,i) => {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.type = 'triangle'; o.frequency.value = f; o.connect(g); g.connect(audioCtx.destination);
+                    g.gain.setValueAtTime(0, now + i*0.1); 
+                    g.gain.linearRampToValueAtTime(0.2, now + i*0.1 + 0.1); 
+                    g.gain.exponentialRampToValueAtTime(0.001, now + i*0.1 + 0.8);
+                    o.start(now + i*0.1); o.stop(now + i*0.1 + 0.8);
+                });
+            } catch(e) { console.log('Audio error', e); }
+        }
+
+        initMenu();
+        initGame();
+    </script>
+</body>
+</html>
+        </textarea>
+
+    </div>
+
+    <script>
+        function showProject(projectId, element) {
+            // Aggiorna voci di menu attive
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            // Gestisce la visibilità dei pannelli vetrina
+            document.querySelectorAll('.project-panel').forEach(panel => panel.classList.remove('active'));
+            const activePanel = document.getElementById(projectId);
+            activePanel.classList.add('active');
+
+            // Caricamento dinamico dei codici gioco negli iframe (previene caricamenti inutili all'avvio)
+            const iframe = activePanel.querySelector('.game-iframe');
+            if (iframe && !iframe.srcdoc) {
+                const templateId = iframe.getAttribute('data-template');
+                const rawCode = document.getElementById(templateId).value;
+                iframe.srcdoc = rawCode;
+            }
+        }
+    </script>
+</body>
+</html>
