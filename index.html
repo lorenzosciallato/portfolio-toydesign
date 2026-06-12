@@ -235,6 +235,35 @@
             box-shadow: 0 15px 25px rgba(44, 36, 22, 0.2);
             color: var(--bg-avorio);
         }
+        @media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        overflow: auto;
+    }
+    .sidebar {
+        width: 100%;
+        padding: 30px 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(44, 36, 22, 0.05);
+    }
+    .subtitle { margin-bottom: 20px; }
+    .nav-menu {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    .nav-item { white-space: nowrap; }
+    .main-content {
+        padding: 20px;
+        overflow-y: visible;
+    }
+    .showcase-layout {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .project-visual, .project-info { width: 100%; }
+    .project-image { max-height: 50vh; }
+}
     </style>
 </head>
 <body>
@@ -462,6 +491,7 @@
         }
         @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05); } }
         .win-sub { font-size: 1rem; font-weight: bold; color: var(--nero); margin-top: 20px; }
+        
     </style>
 </head>
 <body>
